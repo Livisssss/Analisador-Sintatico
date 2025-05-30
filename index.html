@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Analisador Sintático</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+  <header class="header-principal">
+    <h1>Analisador Sintático</h1>
+  </header>
+  
+  <div class="container">
+    
+    <!-- COLUNA ESQUERDA -->
+    <div class="coluna-esquerda">
+      
+      <div class="bloco" id="divGramatica">
+        <h3>Gramática</h3>
+        <div class="regrasGramatica">
+          <span>S := cBd | aAc</span>
+          <span>A := dC | bBa</span>
+          <span>B := bCc | cSb | ε</span>
+          <span>C := bAa | a</span>
+        </div>
+      </div>
+
+      <div class="linha-dupla">
+        <div class="bloco" id="divFirst">
+          <h3>First</h3>
+          <div class="regrasGramatica">
+            <span>S = {c, a}</span>
+            <span>A = {d, b}</span>
+            <span>B = {b, c, ε}</span>
+            <span>C = {b, a}</span>
+          </div>
+        </div>
+
+        <div class="bloco" id="divFollow">
+          <h3>Follow</h3>
+          <div class="regrasGramatica">
+            <span>S = {$, b}</span>
+            <span>A = {c, a}</span>
+            <span>B = {d, a}</span>
+            <span>C = {c, a}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bloco" id="divParsingEstatica">
+        <h3>Tabela de Parsing</h3>
+        <table id="tabela" class="tg">
+          <thead>
+            <tr>
+              <th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>S</td><td>S → aAc</td><td></td><td>S → cBd</td><td></td><td></td>
+            </tr>
+            <tr>
+              <td>A</td><td></td><td>A → bBa</td><td></td><td>A → dC</td><td></td>
+            </tr>
+            <tr>
+              <td>B</td><td>B → ε</td><td>B → bCc</td><td>B → cSb</td><td>B → ε</td><td></td>
+            </tr>
+            <tr>
+              <td>C</td><td>C → a</td><td>C → bAa</td><td></td><td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA -->
+    <div class="coluna-direita">
+      
+      <div class="top-bar">
+        <input id="inputPalavra" type="text" class="inputText" placeholder="Entrada" oninput="iniciarAutomato()" required />
+        <button class="btn" onclick="gerarSentenca()">Gerar sentença</button>
+        <button class="btn" onclick="limpar()">Limpar</button>
+        <button class="btn" onclick="proximoPasso()">Próximo Passo</button>
+        <button class="btn" onclick="ultimoPasso()">Ir para último passo</button>
+      </div>
+
+      <div class="interacoes">
+        <table id="tabelaAutomato" class="tg">
+          <!-- Tabela dinâmica -->
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

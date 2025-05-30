@@ -1,0 +1,198 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+.header-principal {
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 1.8rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+body {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+/* LAYOUT PRINCIPAL */
+.container {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 40px); /* ocupa a altura total da tela menos o padding do body */
+  align-items: stretch;
+}
+
+/* COLUNA ESQUERDA */
+.coluna-esquerda {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+/* COLUNA DIREITA */
+.coluna-direita {
+  width: 65%;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* BLOCO PADRÃO (gramática, parsing, etc) */
+.bloco {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.bloco h3 {
+  margin-bottom: 10px;
+  color: #343a40;
+}
+
+/* GRAMÁTICA */
+#divGramatica {
+  width: 420px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* FIRST & FOLLOW */
+.linha-dupla {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#divFirst,
+#divFollow {
+  flex: 1;
+  max-width: 200px;
+}
+
+.regrasGramatica span {
+  display: block;
+  padding: 2px 0;
+}
+
+/* INPUT E BOTÕES */
+.top-bar {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.inputText {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+/* TABELAS */
+table.tg {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+table.tg th,
+table.tg td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+table.tg th {
+  background-color: #f1f3f5;
+  color: #495057;
+  font-weight: bold;
+}
+
+table.tg td {
+  background-color: #ffffff;
+  color: #212529;
+}
+
+/* TABELA PARSING */
+#divParsingEstatica {
+  width: 420px;
+  margin: 20px auto 0 auto;
+  text-align: left;
+}
+
+/* EXECUÇÃO DO AUTÔMATO */
+.interacoes {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  overflow-x: auto;
+  flex-grow: 0;
+  height: 100%;
+  margin-bottom: 180px;
+}
+
+
+/* LARGURA DAS COLUNAS */ 
+.interacoes table.tg {
+  width: 100%;         /* largura total fixa */
+  table-layout: fixed;  /* força largura fixa das colunas */
+  border-collapse: collapse;
+}
+
+.interacoes table.tg th:nth-child(1),
+.interacoes table.tg td:nth-child(1) {
+  width: 100px;  /* largura da primeira coluna */
+}
+
+.interacoes table.tg th:nth-child(2),
+.interacoes table.tg td:nth-child(2) {
+  width: 300px;  /* largura da segunda coluna */
+}
+
+.interacoes table.tg th:nth-child(3),
+.interacoes table.tg td:nth-child(3) {
+  width: 500  px; /* largura da terceira coluna */
+}
+
