@@ -11,23 +11,28 @@ html, body {
 }
 
 .header-principal {
-  background-color: #007bff;
+  background-color: #44749d;
+  height: 80px;
+  line-height: 80px; /* centraliza o texto verticalmente */
   color: white;
-  padding: 20px;
   text-align: center;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-weight: 700;
-  font-size: 1.8rem;
+  margin: 0 -20px 50px -20px; /* ocupa toda a largura apesar do body ter padding */
+  font-size: 14px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
 }
+
+
+
 
 
 body {
   background-color: #f8f9fa;
-  padding: 20px;
+  height: 100%;
+  overflow: hidden;
 }
+
+
 
 /* LAYOUT PRINCIPAL */
 .container {
@@ -117,7 +122,7 @@ body {
 }
 
 .btn {
-  background-color: #007bff;
+  background-color: #78a890;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -127,7 +132,7 @@ body {
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #69a2a8;
 }
 
 /* TABELAS */
