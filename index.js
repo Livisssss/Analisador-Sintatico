@@ -1,175 +1,207 @@
-var iteracao;
-var pilha;
-var entrada;
-var listaProducao = [];
-var inputPalavra = document.getElementById("inputPalavra");
-var tabelaAutomato = document.getElementById("tabelaAutomato");
-var fim;
+let iteracao;
+let pilha;
+let entrada;
+const listaProducao = [];
+const inputPalavra = document.getElementById("inputPalavra");
+const tabelaAutomato = document.getElementById("tabelaAutomato");
+let fim;
 
 function proximoPasso() {
-    if (inputPalavra.value) {
-        if (fim) iniciarAutomato();
-        if (!entrada) entrada = inputPalavra.value + "$";
+  if (inputPalavra.value) {
+    if (fim) return;
+    if (!entrada) entrada = inputPalavra.value + "$";
 
-        let acao = "";
-        let charPilha = pilha.slice(-1);
-        let pilhaTabela = pilha;
-        let entradaTabela = entrada;
-        pilha = pilha.slice(0, -1);
+    let acao = "";
+    let charPilha = pilha.slice(-1);
+    let pilhaTabela = pilha;
+    let entradaTabela = entrada;
+    pilha = pilha.slice(0, -1);
 
-        iteracao++;
-        if (charPilha == entrada.charAt(0) && charPilha == "$") {
-            acao = "Aceito em " + iteracao + " iterações!";
-            alert("Aceito em " + iteracao + " iterações!");
-            fim = true;
-        } else if (charPilha && charPilha == charPilha.toUpperCase()) {
-            var producao = buscaProducao(charPilha, entrada.charAt(0));
-            if (producao) {
-                acao = producao.nTerminal + " → " + producao.prod;
-                if (producao.prod != "ε")
-                    pilha += producao.prod.split('').reverse().join('');
-            } else {
-                fim = true;
-                acao = "Erro em " + iteracao + " iterações!";
-                alert("Erro em " + iteracao + " iterações!");
-            }
-        } else if (charPilha && charPilha == entrada.charAt(0)) {
-            acao = "Lê '" + entrada.charAt(0) + "'";
-            entrada = entrada.substr(1);
-        } else {
-            fim = true;
-            acao = "Erro em " + iteracao + " iterações!";
-            alert("Erro em " + iteracao + " iterações!");
-        }
-
-        insereLinhaTabela(pilhaTabela, entradaTabela, acao);
-    } else
+    iteracao++;
+    if (charPilha == entrada.charAt(0) && charPilha == "$") {
+      acao = "Aceito em " + iteracao + " iterações!";
+      mostrarPopup("Aceito em " + iteracao + " iterações!", "sucesso");
+      fim = true;
+    } else if (charPilha && charPilha == charPilha.toUpperCase()) {
+      var producao = buscaProducao(charPilha, entrada.charAt(0));
+      if (producao) {
+        acao = producao.nTerminal + " → " + producao.prod;
+        if (producao.prod != "ε")
+          pilha += producao.prod.split("").reverse().join("");
+      } else {
         fim = true;
+        acao = "Erro em " + iteracao + " iterações!";
+        mostrarPopup("Erro em " + iteracao + " iterações!", "erro");
+      }
+    } else if (charPilha && charPilha == entrada.charAt(0)) {
+      acao = "Lê " + entrada.charAt(0) + "";
+      entrada = entrada.slice(1);
+    } else {
+      fim = true;
+      acao = "Erro em " + iteracao + " iterações!";
+      mostrarPopup("Erro em " + iteracao + " iterações!", "erro");
+    }
+
+    insereLinhaTabela(pilhaTabela, entradaTabela, acao);
+  } else fim = true;
 }
 
 function ultimoPasso() {
-    while (!fim)
-        proximoPasso();
+  while (!fim) proximoPasso();
+}
+
+function mostrarPopup(mensagem, tipo = "info", duracao = 5000) {
+  const popup = document.getElementById("popupMensagem");
+  popup.textContent = mensagem;
+
+  popup.className = "popup-mensagem";
+  if (tipo === "sucesso") popup.classList.add("sucesso");
+  else if (tipo === "erro") popup.classList.add("erro");
+
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, duracao);
 }
 
 function gerarSentenca() {
-    let gerado = false;
-    let sentenca = "S";
-    let nTerminal = "S";
-    var rex = /[A-Z]/g;
+  const MAX_CARACTERES = 30;
+  const MAX_PROFUNDIDADE = 40;
 
-    while (!gerado) {
-        for (let idx in listaProducao) {
-            let naoTerminal = listaProducao[idx];
-            if (naoTerminal.chave == nTerminal) {
-                let rand = Math.floor(Math.random() * naoTerminal.lista.length);
-                let producao = naoTerminal.lista[rand];
-                if (producao.prod != "ε") {
-                    sentenca = sentenca.replace(nTerminal, producao.prod);
-                    let match;
-                    if ((match = rex.exec(sentenca)) == null) {
-                        gerado = true;
-                    } else
-                        nTerminal = match[0];
-                }
-            }
-        }
+  function expandir(simbolo, contador, profundidade) {
+    if (profundidade > MAX_PROFUNDIDADE || contador.count >= MAX_CARACTERES)
+      return "";
+
+    if (!/[A-Z]/.test(simbolo)) {
+      contador.count++;
+      return simbolo;
     }
-    inputPalavra.value = sentenca;
-    iniciarAutomato();
+
+    const producoes =
+      listaProducao.find((p) => p.chave === simbolo)?.lista ?? [];
+
+    if (producoes.length === 0) return "";
+
+    const randIndex = Math.floor(Math.random() * producoes.length);
+    const prod = producoes[randIndex].prod;
+
+    if (prod === "ε") return "";
+
+    const resultado = prod
+      .split("")
+      .map((s) => expandir(s, contador, profundidade + 1))
+      .join("");
+
+    return resultado;
+  }
+
+  let sentenca = "";
+  let contador;
+  let sucesso = false;
+
+  while (!sucesso) {
+    contador = { count: 0 };
+    sentenca = expandir("S", contador, 0);
+
+    if (sentenca.length <= MAX_CARACTERES && sentenca.length > 0) {
+      sucesso = true;
+    }
+  }
+
+  inputPalavra.value = sentenca;
+  iniciarAutomato();
 }
 
 function insereLinhaTabela(pilhaTabela, entradaTabela, acao) {
-    var tableRow = tabelaAutomato.insertRow(-1);
-    tableRow.appendChild(criarColuna("td", iteracao, " textCenter"));
-    tableRow.appendChild(criarColuna("td", pilhaTabela, " regrasGramatica"));
-    tableRow.appendChild(criarColuna("td", entradaTabela, " textEnd"));
-    tableRow.appendChild(criarColuna("td", acao, " textCenter"));
+  const tableRow = tabelaAutomato.insertRow(-1);
+
+  tableRow.appendChild(criarColuna("td", iteracao, " textCenter"));
+  tableRow.appendChild(criarColuna("td", pilhaTabela, " regrasGramatica"));
+  tableRow.appendChild(criarColuna("td", entradaTabela, " textEnd"));
+
+  let classeAcao = "textCenter";
+  if (/erro/i.test(acao)) {
+    classeAcao += " acao-erro";
+  } else if (/aceito/i.test(acao)) {
+    classeAcao += " acao-sucesso";
+  }
+
+  tableRow.appendChild(criarColuna("td", acao, classeAcao));
 }
 
 function buscaProducao(pilha, entrada) {
-    for (let i in listaProducao) {
-        let naoTerminal = listaProducao[i];
-        if (naoTerminal.chave == pilha) {
-            for (let j in naoTerminal.lista) {
-                let producao = naoTerminal.lista[j];
-                if (producao.nTerminal == pilha && producao.inicial == entrada)
-                    return producao;
-            }
-        }
-    }
-    return null;
+  const naoTerminal = listaProducao.find((p) => p.chave === pilha);
+  if (!naoTerminal) return null;
+
+  return (
+    naoTerminal.lista.find(
+      (p) => p.nTerminal === pilha && p.inicial === entrada
+    ) || null
+  );
 }
 
 function criarColuna(tipo, texto, classe) {
-    let cellHeader = document.createElement(tipo);
-    cellHeader.className = "tg-fovp" + classe;
-    cellHeader.innerHTML = texto;
-    return cellHeader;
+  let cellHeader = document.createElement(tipo);
+  cellHeader.className = `tg-fovp ${classe}`.trim();
+  cellHeader.innerHTML = texto;
+  return cellHeader;
 }
 
 function criarProducao(nTerminal, inicial, prod) {
-    let existe = false;
-    let naoTerminal;
-    for (let idx in listaProducao) {
-        naoTerminal = listaProducao[idx];
-        existe = naoTerminal.chave == nTerminal;
-        if (existe) {
-            listaProducao.splice(idx, 1);
-            break;
-        }
-    } 
+  let naoTerminal = listaProducao.find((nt) => nt.chave === nTerminal);
 
-    if (!existe) {
-        naoTerminal = new Object();
-        naoTerminal.chave = nTerminal;
-        naoTerminal.lista = [];
-    }
+  if (!naoTerminal) {
+    naoTerminal = { chave: nTerminal, lista: [] };
+    listaProducao.push(naoTerminal);
+  }
 
-    let producao = new Object();
-    producao.nTerminal = nTerminal;
-    producao.inicial = inicial;
-    producao.prod = prod;
+  naoTerminal.lista.push({
+    nTerminal,
+    inicial,
+    prod,
+  });
 
-    naoTerminal.lista.push(producao);
-    return naoTerminal;
+  return naoTerminal;
 }
 
 function limpar() {
-    inputPalavra.value = "";
-    iniciarAutomato();
+  inputPalavra.value = "";
+  iniciarAutomato();
 }
 
-function iniciarAutomato(){
-    iteracao = 0;
-    pilha = "$S";
-    entrada = "";
-    fim = false;
+function iniciarAutomato() {
+  iteracao = 0;
+  pilha = "$S";
+  entrada = "";
+  fim = false;
 
-    while (tabelaAutomato.hasChildNodes()) {
-        tabelaAutomato.removeChild(tabelaAutomato.lastChild);
-    }
+  while (tabelaAutomato.hasChildNodes()) {
+    tabelaAutomato.removeChild(tabelaAutomato.lastChild);
+  }
 
-    var header = tabelaAutomato.createTHead();
-    var tableRow = header.insertRow(-1);
-    
-    tableRow.appendChild(criarColuna("th", " ", " textCenter"));
-    tableRow.appendChild(criarColuna("th", "Pilha", " textCenter"));
-    tableRow.appendChild(criarColuna("th", "Entrada", " textCenter"));
-    tableRow.appendChild(criarColuna("th", "Ação", " textCenter"));
+  var header = tabelaAutomato.createTHead();
+  var tableRow = header.insertRow(-1);
+
+  tableRow.appendChild(criarColuna("th", "Iterações", " textCenter"));
+  tableRow.appendChild(criarColuna("th", "Pilha", " textCenter"));
+  tableRow.appendChild(criarColuna("th", "Entrada", " textCenter"));
+  tableRow.appendChild(criarColuna("th", "Ação", " textCenter"));
 }
 
 iniciarAutomato();
-listaProducao.push(criarProducao("S", "a", "aAc"));
-listaProducao.push(criarProducao("S", "c", "cBd"));
+listaProducao.push(criarProducao("S", "a", "aAb"));
+listaProducao.push(criarProducao("S", "c", "cD"));
 
-listaProducao.push(criarProducao("A", "b", "bBa"));
-listaProducao.push(criarProducao("A", "d", "dC"));
+listaProducao.push(criarProducao("A", "c", "cAD"));
+listaProducao.push(criarProducao("A", "d", "dCa"));
 
-listaProducao.push(criarProducao("B", "a", "ε"));
-listaProducao.push(criarProducao("B", "b", "bCc"));
-listaProducao.push(criarProducao("B", "c", "cSb"));
-listaProducao.push(criarProducao("B", "d", "ε"));
+listaProducao.push(criarProducao("B", "a", "aBc"));
+listaProducao.push(criarProducao("B", "c", "cC"));
+listaProducao.push(criarProducao("B", "d", "dD"));
 
-listaProducao.push(criarProducao("C", "a", "a"));
-listaProducao.push(criarProducao("C", "b", "bAa"));
+listaProducao.push(criarProducao("C", "a", "ε"));
+listaProducao.push(criarProducao("C", "b", "bDA"));
+listaProducao.push(criarProducao("C", "c", "ε"));
+
+listaProducao.push(criarProducao("D", "d", "dS"));

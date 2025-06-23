@@ -6,61 +6,55 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
-
-.header-principal {
-  background-color: #44749d;
-  height: 80px;
-  line-height: 80px; /* centraliza o texto verticalmente */
-  color: white;
-  text-align: center;
-  margin: 0 -20px 50px -20px; /* ocupa toda a largura apesar do body ter padding */
-  font-size: 14px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 700;
-}
-
-
-
-
 
 body {
   background-color: #f8f9fa;
-  height: 100%;
   overflow: hidden;
 }
 
-
+/* CABEÇALHO */
+.header-principal {
+  background-color: #44749d;
+  height: 80px;
+  line-height: 80px;
+  color: white;
+  text-align: center;
+  margin: 0 -20px 50px -20px;
+  font-size: 14px;
+  font-weight: 700;
+}
 
 /* LAYOUT PRINCIPAL */
 .container {
   display: flex;
   gap: 20px;
-  height: calc(100vh - 40px); /* ocupa a altura total da tela menos o padding do body */
+  height: calc(100vh - 40px);
   align-items: stretch;
+  padding: 0 20px;
 }
 
-/* COLUNA ESQUERDA */
+/* COLUNAS */
+.coluna-esquerda,
+.coluna-direita {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
 .coluna-esquerda {
   width: 30%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  height: 100%;
 }
 
-/* COLUNA DIREITA */
 .coluna-direita {
   width: 65%;
-  gap: 20px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
-/* BLOCO PADRÃO (gramática, parsing, etc) */
+/* BLOCO GENÉRICO */
 .bloco {
   background-color: #fff;
   padding: 15px;
@@ -100,7 +94,7 @@ body {
   padding: 2px 0;
 }
 
-/* INPUT E BOTÕES */
+/* TOPO: INPUT E BOTÕES */
 .top-bar {
   background-color: #fff;
   padding: 15px;
@@ -121,6 +115,7 @@ body {
   min-width: 180px;
 }
 
+/* BOTÕES */
 .btn {
   background-color: #78a890;
   color: white;
@@ -128,7 +123,7 @@ body {
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .btn:hover {
@@ -159,9 +154,9 @@ table.tg td {
   color: #212529;
 }
 
-/* TABELA PARSING */
+/* TABELA DE PARSING ESTÁTICA */
 #divParsingEstatica {
-  width: 420px;
+  width: 440px;
   margin: 20px auto 0 auto;
   text-align: left;
 }
@@ -178,26 +173,86 @@ table.tg td {
   margin-bottom: 180px;
 }
 
-
-/* LARGURA DAS COLUNAS */ 
+/* TABELA DE EXECUÇÃO */
 .interacoes table.tg {
-  width: 100%;         /* largura total fixa */
-  table-layout: fixed;  /* força largura fixa das colunas */
-  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .interacoes table.tg th:nth-child(1),
 .interacoes table.tg td:nth-child(1) {
-  width: 100px;  /* largura da primeira coluna */
+  width: 100px;
 }
 
 .interacoes table.tg th:nth-child(2),
 .interacoes table.tg td:nth-child(2) {
-  width: 300px;  /* largura da segunda coluna */
+  width: 300px;
 }
 
 .interacoes table.tg th:nth-child(3),
 .interacoes table.tg td:nth-child(3) {
-  width: 500  px; /* largura da terceira coluna */
+  width: 500px;
 }
 
+.acao-erro {
+  color: #dc3545 !important;
+  font-weight: bold;
+}
+
+.acao-sucesso {
+  color: #28a745 !important;
+  font-weight: bold;
+}
+
+.popup-mensagem {
+  position: fixed;
+  bottom: 80px;
+  right: 30px;
+  background-color: #333;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 11000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  text-align: center;
+}
+
+.popup-mensagem.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.popup-mensagem.sucesso {
+  background-color: #28a745;
+}
+.popup-mensagem.erro {
+  background-color: #dc3545;
+}
+
+.footer-principal {
+  background-color: #44749d;
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  z-index: 10000;
+}
+
+@media (max-width: 600px) {
+  .footer-principal {
+    font-size: 0.8rem;
+    padding: 12px 10px;
+  }
+}
