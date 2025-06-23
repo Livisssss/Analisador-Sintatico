@@ -1,101 +1,156 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Analisador Sintático</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analisador Sintático</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header-principal">
+      <h1>ANALISADOR SINTÁTICO</h1>
+    </header>
 
-    <!-- HEADER -->
-  <header class="header-principal">
-    <h1>ANALISADOR SINTÁTICO</h1>
-  </header>
-  
-  <div class="container">
-    
-    <!-- COLUNA ESQUERDA -->
-    <div class="coluna-esquerda">
-      
-      <div class="bloco" id="divGramatica">
-        <h3>Gramática</h3>
-        <div class="regrasGramatica">
-          <span>S := cBd | aAc</span>
-          <span>A := dC | bBa</span>
-          <span>B := bCc | cSb | ε</span>
-          <span>C := bAa | a</span>
-        </div>
-      </div>
-
-      <div class="linha-dupla">
-        <div class="bloco" id="divFirst">
-          <h3>First</h3>
+    <main class="container">
+      <section class="coluna-esquerda">
+        <!-- Gramática -->
+        <article class="bloco" id="divGramatica">
+          <h3>Gramática</h3>
           <div class="regrasGramatica">
-            <span>S = {c, a}</span>
-            <span>A = {d, b}</span>
-            <span>B = {b, c, ε}</span>
-            <span>C = {b, a}</span>
+            <span>S := aAb | cD</span>
+            <span>A := dCa | cAD</span>
+            <span>B := aBc | dD | cC</span>
+            <span>C := bDA | ε</span>
+            <span>D := dS</span>
           </div>
+        </article>
+
+        <!-- First e Follow -->
+        <div class="linha-dupla">
+          <article class="bloco" id="divFirst">
+            <h3>First</h3>
+            <div class="regrasGramatica">
+              <span>S = {a, c}</span>
+              <span>A = {d, c}</span>
+              <span>B = {a, d, c}</span>
+              <span>C = {b, ε}</span>
+              <span>D = {d}</span>
+            </div>
+          </article>
+
+          <article class="bloco" id="divFollow">
+            <h3>Follow</h3>
+            <div class="regrasGramatica">
+              <span>S = {$, a, b, c, d}</span>
+              <span>A = {b, d, a, c}</span>
+              <span>B = {c}</span>
+              <span>C = {a, c}</span>
+              <span>D = {d, c, $, b, a}</span>
+            </div>
+          </article>
         </div>
 
-        <div class="bloco" id="divFollow">
-          <h3>Follow</h3>
-          <div class="regrasGramatica">
-            <span>S = {$, b}</span>
-            <span>A = {c, a}</span>
-            <span>B = {d, a}</span>
-            <span>C = {c, a}</span>
-          </div>
+        <!-- Parsing Table -->
+        <article class="bloco" id="divParsingEstatica">
+          <h3>Tabela de Parsing</h3>
+          <table id="tabela" class="tg" aria-label="Tabela de Parsing">
+            <thead>
+              <tr>
+                <th></th>
+                <th>a</th>
+                <th>b</th>
+                <th>c</th>
+                <th>d</th>
+                <th>$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>S</td>
+                <td>S → aAb</td>
+                <td>-</td>
+                <td>S → cD</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>A</td>
+                <td>-</td>
+                <td>-</td>
+                <td>A → cAD</td>
+                <td>A → dCa</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>B</td>
+                <td>B → aBc</td>
+                <td>-</td>
+                <td>B → cC</td>
+                <td>B → dD</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>C</td>
+                <td>C → ε</td>
+                <td>C → bDA</td>
+                <td>C → ε</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr>
+                <td>D</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>D → dS</td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </section>
+
+      <!-- COLUNA DIREITA -->
+      <section class="coluna-direita">
+        <!-- Controles -->
+        <div class="top-bar">
+          <input
+            id="inputPalavra"
+            type="text"
+            class="inputText"
+            placeholder="Entrada"
+            oninput="iniciarAutomato()"
+            required
+            aria-label="Entrada da palavra"
+          />
+          <button class="btn" onclick="gerarSentenca()">Gerar sentença</button>
+          <button class="btn" onclick="limpar()">Limpar</button>
+          <button class="btn" onclick="proximoPasso()">Próximo passo</button>
+          <button class="btn" onclick="ultimoPasso()">Executar tudo</button>
         </div>
-      </div>
 
-      <div class="bloco" id="divParsingEstatica">
-        <h3>Tabela de Parsing</h3>
-        <table id="tabela" class="tg">
-          <thead>
-            <tr>
-              <th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>$</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>S</td><td>S → aAc</td><td></td><td>S → cBd</td><td></td><td></td>
-            </tr>
-            <tr>
-              <td>A</td><td></td><td>A → bBa</td><td></td><td>A → dC</td><td></td>
-            </tr>
-            <tr>
-              <td>B</td><td>B → ε</td><td>B → bCc</td><td>B → cSb</td><td>B → ε</td><td></td>
-            </tr>
-            <tr>
-              <td>C</td><td>C → a</td><td>C → bAa</td><td></td><td></td><td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <!-- Resultado do autômato -->
+        <div class="interacoes">
+          <table
+            id="tabelaAutomato"
+            class="tg"
+            aria-label="Execução do Autômato"
+          ></table>
+        </div>
+      </section>
+    </main>
 
-    <!-- COLUNA DIREITA -->
-    <div class="coluna-direita">
-      
-      <div class="top-bar">
-        <input id="inputPalavra" type="text" class="inputText" placeholder="Entrada" oninput="iniciarAutomato()" required />
-        <button class="btn" onclick="gerarSentenca()">Gerar sentença</button>
-        <button class="btn" onclick="limpar()">Limpar</button>
-        <button class="btn" onclick="proximoPasso()">Próximo Passo</button>
-        <button class="btn" onclick="ultimoPasso()">Ir para último passo</button>
-      </div>
+    <!-- PopUp de Status -->
+    <div id="popupMensagem" class="popup-mensagem"></div>
 
-      <div class="interacoes">
-        <table id="tabelaAutomato" class="tg">
-          <!-- Tabela dinâmica -->
-        </table>
-      </div>
+    <footer class="footer-principal">
+      <p>
+        © URI 2025 — Analisador Sintático (Compiladores) | Desenvolvido por
+        Bruno Simionato & Lívia Verlindo
+      </p>
+    </footer>
 
-    </div>
-
-  </div>
-
-  <script src="index.js"></script>
-</body>
+    <script src="index.js"></script>
+  </body>
 </html>
