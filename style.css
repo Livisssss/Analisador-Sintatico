@@ -19,14 +19,15 @@ body {
 /* CABEÇALHO */
 .header-principal {
   background-color: #44749d;
-  height: 80px;
-  line-height: 80px;
+  height: 60px;
+  line-height: 60px;
   color: white;
   text-align: center;
   margin: 0 -20px 50px -20px;
   font-size: 14px;
   font-weight: 700;
 }
+
 
 /* LAYOUT PRINCIPAL */
 .container {
@@ -42,7 +43,7 @@ body {
 .coluna-direita {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
   height: 100%;
 }
 
@@ -70,7 +71,7 @@ body {
 
 /* GRAMÁTICA */
 #divGramatica {
-  width: 420px;
+  width: 80%;
   margin: 0 auto;
   text-align: left;
 }
@@ -80,13 +81,13 @@ body {
   display: flex;
   gap: 20px;
   justify-content: center;
-  margin-top: 20px;
+  margin: 15px auto;
+  width: 80%;
 }
 
 #divFirst,
 #divFollow {
   flex: 1;
-  max-width: 200px;
 }
 
 .regrasGramatica span {
@@ -156,8 +157,8 @@ table.tg td {
 
 /* TABELA DE PARSING ESTÁTICA */
 #divParsingEstatica {
-  width: 440px;
-  margin: 20px auto 0 auto;
+  width: 80%;
+  margin: 0px auto 0 auto;
   text-align: left;
 }
 
@@ -170,7 +171,7 @@ table.tg td {
   overflow-x: auto;
   flex-grow: 0;
   height: 100%;
-  margin-bottom: 180px;
+  margin-bottom: 10%;
 }
 
 /* TABELA DE EXECUÇÃO */
@@ -238,8 +239,8 @@ table.tg td {
   background-color: #44749d;
   color: white;
   text-align: center;
-  padding: 15px 20px;
-  font-weight: 600;
+  padding: 5px 20px;
+  font-weight: 500;
   font-size: 0.9rem;
   position: fixed;
   bottom: 0;
